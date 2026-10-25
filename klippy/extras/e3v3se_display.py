@@ -662,8 +662,11 @@ class E3v3seDisplay:
         except Exception as e: 
             self.error("Error registering M117: %s" % e)
 
-    def handle_mcu_error(self):
-        self.show_popup(self.printer.get_state_message())
+    def handle_mcu_error(self, *args):
+        state_message = self.printer.get_state_message()
+        if isinstance(state_message, (tuple, list)):
+            state_message = " ".join(str(s) for s in state_message)
+        self.show_popup(state_message)
 
     def cmd_M117(self, gcmd):
         msg = gcmd.get_raw_command_parameters() or None
